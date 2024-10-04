@@ -67,7 +67,7 @@ impl Card {
 
 impl fmt::Display for Card {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.value)
+        write!(f, "{} of {}", self.value, self.suit)
     }
 }
 
@@ -98,7 +98,7 @@ impl Deck {
     }
 
     pub fn shuffle(&mut self)-> &mut Self {
-        for _i in  0..150 {
+        for _i in  0..1000 {
             let from_loc = rand::thread_rng().gen_range(0..52);
             let to_loc = rand::thread_rng().gen_range(0..52);
             self.cards.swap(from_loc, to_loc);
@@ -132,8 +132,9 @@ impl Player {
 
     pub fn print_hand(&self) {
         for card in &self.hand {
-            println!("{} of {}", card.value, card.suit)
+            print!("{} of {}, ", card.value, card.suit);
         }
+        println!();
     }
 
     pub fn get_score(&self) -> u8 {
