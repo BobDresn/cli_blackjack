@@ -63,7 +63,7 @@ impl Card {
         self.value = 1;
     }
 }
-//Methods: new()
+//Methods: new(), set_to_one()
 
 impl fmt::Display for Card {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -118,7 +118,7 @@ impl Deck {
         self.cards.pop();
     }
 }
-//Methods: new, shuffle, deal
+//Methods: new(), shuffle(), deal()
 
 pub struct Player {
     pub hand: Vec<Card>,
