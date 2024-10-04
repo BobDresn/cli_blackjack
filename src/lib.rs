@@ -59,11 +59,8 @@ impl Card {
         }
     }
 
-    fn set_card(&mut self, player: &Player) -> &Self {
-        if self.value == 11 && player.get_score() > 21 {
-            self.value = 1;
-        }
-        self
+    fn set_to_one(&mut self) {
+        self.value = 1;
     }
 }
 //Methods: new()
@@ -110,7 +107,14 @@ impl Deck {
     }
 
     pub fn deal(&mut self, player: &mut Player) {
-        player.hand.push(self.cards.pop().unwrap());
+        let new_card = self.cards.pop().unwrap();
+        let score = player.get_score();
+        if score > 21 {
+            player.hand.iter_mut().for_each(|x| if x.value == 11 {
+                x.set_to_one();
+            })
+        }
+        player.hand.push(new_card);
         self.cards.pop();
     }
 }
