@@ -144,3 +144,71 @@ impl Player {
     }
 }
 //Methods: new, print_hand, get_score
+
+pub struct GameState {
+    pub deck: Deck,
+    pub player: Player,
+    pub dealer: Player,
+}
+
+impl GameState {
+    pub fn new() -> Self {
+        let mut deck = Deck::new();
+        deck.shuffle();
+        let player = Player::new();
+        let dealer = Player::new();
+        Self {
+            deck,
+            player,
+            dealer,
+        }
+    }
+
+    pub fn player_turn(&mut self) {
+        loop {
+            println!("You have {}, dealer has {}.", self.player.get_score(), self.dealer.get_score());
+            let action = get_input("What would you like to do?(hit/stay)");
+            match action.as_str() {
+                "hit" => {
+                    self.deck.deal(&mut self.player);
+                    if self.player.get_score() > 21 {
+                        println!("Dealer wins! You busted!");
+                        break;
+                    }
+                },
+                _ => {
+                    break;
+                }
+            }
+        }
+    }
+
+    pub fn dealer_turn(&mut self) {
+        while self.dealer.get_score() < 17 {
+            self.deck.deal(&mut self.dealer);
+            println!("{:?}", self.dealer.hand.last());
+        }
+        println!();
+    }
+
+    pub fn determine_winner(&mut self) {
+        if self.player.get_score() > 21 {
+            println!("Dealer wins! You busted! You had {} , dealer had {}", self.player.get_score(), self.dealer.get_score());
+        } else if self.dealer.get_score() > 21 {
+            println!("You win! Dealer busted! You had {}, dealer had {}", self.player.get_score(), self.dealer.get_score());
+        } else if self.player.get_score() == self.dealer.get_score() {
+            println!("It's a push! You had {}, dealer had {}", self.player.get_score(), self.dealer.get_score());
+        } else if self.player.get_score() > self.dealer.get_score() {
+            println!("You win! You had {}, dealer had {}", self.player.get_score(), self.dealer.get_score());
+        } else {
+            println!("Dealer wins! You had {}, dealer had {}", self.player.get_score(), self.dealer.get_score());
+        }
+    }
+}
+
+pub fn get_input(prompt: &str) -> String {
+    println!("{}", prompt);
+    let mut input = String::new();
+    std::io::stdin().read_line(&mut input).expect("Failed to read line");
+    input.trim().to_lowercase()
+}
