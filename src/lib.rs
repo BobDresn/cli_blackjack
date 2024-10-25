@@ -155,8 +155,7 @@ impl GameState {
     pub fn new() -> Self {
         let mut deck = Deck::new();
         deck.shuffle();
-        let player = Player::new();
-        let dealer = Player::new();
+        let player, dealer = Player::new();
         Self {
             deck,
             player,
